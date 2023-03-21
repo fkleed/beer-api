@@ -31,4 +31,36 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.findById(id);
     }
+
+    @Override
+    public Customer saveNewCustomer(Customer customer) {
+
+        log.debug("Save new customer to repository: " + customer.getCustomerName());
+
+        return customerRepository.store(customer);
+    }
+
+    @Override
+    public void updateCustomerById(UUID customerId, Customer customer) {
+
+        log.debug("Update existing customer with Id: " + customerId);
+
+        customerRepository.updateCustomerById(customerId, customer);
+    }
+
+    @Override
+    public void deleteById(UUID customerId) {
+
+        log.debug("Delete existing customer with Id: " + customerId);
+
+        customerRepository.deleteById(customerId);
+    }
+
+    @Override
+    public void patchCustomerById(UUID customerId, Customer customer) {
+
+        log.debug("Patch existing customer with Id: " + customerId);
+
+        customerRepository.patchCustomerById(customerId, customer);
+    }
 }

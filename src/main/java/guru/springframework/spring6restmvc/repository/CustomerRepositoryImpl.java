@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.repository;
 import guru.springframework.spring6restmvc.model.Customer;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +22,19 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public void store(Customer customer) {
-        customerMap.put(customer.getId(), customer);
+    public Customer store(Customer customer) {
+
+        Customer savedCustomer = Customer.builder()
+                .id(UUID.randomUUID())
+                .version(1)
+                .customerName(customer.getCustomerName())
+                .createdDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .build();
+
+        customerMap.put(savedCustomer.getId(), savedCustomer);
+
+        return savedCustomer;
     }
 
     @Override
@@ -36,8 +48,32 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public void updateCustomerById(UUID customerId, Customer customer) {
+        Customer existingCustomer = customerMap.get(customerId);
+
+        existingCustomer.setCustomerName(customer.getCustomerName());
+        existingCustomer.setUpdateDate(LocalDateTime.now());
+
+        customerMap.put(existingCustomer.getId(), existingCustomer);
+    }
+
+    @Override
     public void deleteById(UUID id) {
         customerMap.remove(id);
+    }
+
+    @Override
+    public void patchCustomerById(UUID customerId, Customer customer) {
+
+        Customer existingCustomer = customerMap.get(customerId);
+
+        if (StringUtils.hasText(customer.getCustomerName())) {
+            existingCustomer.setCustomerName(customer.getCustomerName());
+        }
+
+        existingCustomer.setUpdateDate(LocalDateTime.now());
+
+        customerMap.put(existingCustomer.getId(), existingCustomer);
     }
 
     @PostConstruct

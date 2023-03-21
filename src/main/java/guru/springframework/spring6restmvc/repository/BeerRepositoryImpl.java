@@ -2,9 +2,9 @@ package guru.springframework.spring6restmvc.repository;
 
 import guru.springframework.spring6restmvc.model.Beer;
 import guru.springframework.spring6restmvc.model.BeerStyle;
-import guru.springframework.spring6restmvc.repository.BeerRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,8 +26,23 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
 
 
     @Override
-    public void store(Beer beer) {
-        beerMap.put(beer.getId(), beer);
+    public Beer store(Beer beer) {
+
+        Beer savedBeer = Beer.builder()
+                .id(UUID.randomUUID())
+                .createdDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .version(1)
+                .price(beer.getPrice())
+                .beerName(beer.getBeerName())
+                .beerStyle(beer.getBeerStyle())
+                .quantityOnHand(beer.getQuantityOnHand())
+                .upc(beer.getUpc())
+                .build();
+
+        beerMap.put(savedBeer.getId(), savedBeer);
+
+        return savedBeer;
     }
 
     @Override
@@ -43,6 +58,51 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
     @Override
     public void deleteById(UUID id) {
         beerMap.remove(id);
+    }
+
+    @Override
+    public void updateBeerById(UUID beerId, Beer beer) {
+
+        Beer existingBeer = beerMap.get(beerId);
+
+        existingBeer.setBeerName(beer.getBeerName());
+        existingBeer.setBeerStyle(beer.getBeerStyle());
+        existingBeer.setUpc(beer.getUpc());
+        existingBeer.setQuantityOnHand(beer.getQuantityOnHand());
+        existingBeer.setPrice(beer.getPrice());
+        existingBeer.setUpdateDate(LocalDateTime.now());
+
+        beerMap.put(existingBeer.getId(), existingBeer);
+    }
+
+    @Override
+    public void patchBeerById(UUID beerId, Beer beer) {
+
+        Beer existingBeer = beerMap.get(beerId);
+
+        if (StringUtils.hasText(beer.getBeerName())) {
+            existingBeer.setBeerName(beer.getBeerName());
+        }
+
+        if (beer.getBeerStyle() != null) {
+            existingBeer.setBeerStyle(beer.getBeerStyle());
+        }
+
+        if (beer.getPrice() != null) {
+            existingBeer.setPrice(beer.getPrice());
+        }
+
+        if (beer.getQuantityOnHand() != null) {
+            existingBeer.setQuantityOnHand(beer.getQuantityOnHand());
+        }
+
+        if (StringUtils.hasText(beer.getUpc())) {
+            existingBeer.setUpc(beer.getUpc());
+        }
+
+        existingBeer.setUpdateDate(LocalDateTime.now());
+
+        beerMap.put(existingBeer.getId(), existingBeer);
     }
 
     @PostConstruct
