@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -180,9 +181,17 @@ class BeerControllerTest {
     }
 
     @Test
+    void getBeerByIdNotFound() throws Exception {
+
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
+
+        mockMvc.perform(get(BeerController.BEER_PATH_ID, UUID.randomUUID())).andExpect(status().isNotFound());
+    }
+
+    @Test
     void getBeerById() throws Exception {
         given(beerService.getBeerById(beer1.getId()))
-                .willReturn(beer1);
+                .willReturn(Optional.of(beer1));
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, beer1.getId())
                         .accept(MediaType.APPLICATION_JSON))

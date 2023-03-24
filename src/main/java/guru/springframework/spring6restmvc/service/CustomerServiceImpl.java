@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -25,11 +26,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getCustomerById(UUID id) {
+    public Optional<Customer> getCustomerById(UUID id) {
 
         log.debug("Get Customer by Id - in service. Id: " + id.toString());
 
-        return customerRepository.findById(id);
+        return Optional.ofNullable(customerRepository.findById(id));
     }
 
     @Override

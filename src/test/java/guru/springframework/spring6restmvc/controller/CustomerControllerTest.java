@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -171,9 +172,17 @@ class CustomerControllerTest {
     }
 
     @Test
+    void getCustomerByIdNotFound() throws Exception {
+
+        given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())).andExpect(status().isNotFound());
+    }
+
+    @Test
     void getCustomerById() throws Exception {
         given(customerService.getCustomerById(customer1.getId()))
-                .willReturn(customer1);
+                .willReturn(Optional.of(customer1));
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, customer1.getId())
                         .accept(MediaType.APPLICATION_JSON))
