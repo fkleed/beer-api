@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.service;
 
-import guru.springframework.spring6restmvc.model.Beer;
+import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repository.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
 
     @Override
-    public List<Beer> listBeers() {
+    public List<BeerDTO> listBeers() {
 
         log.debug("Get all beer in service");
 
@@ -26,7 +26,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Optional<Beer> getBeerById(UUID id) {
+    public Optional<BeerDTO> getBeerById(UUID id) {
 
         log.debug("Get Beer by Id - in service. Id: " + id.toString());
 
@@ -34,7 +34,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer saveNewBeer(Beer beer) {
+    public BeerDTO saveNewBeer(BeerDTO beer) {
 
         log.debug("Save new beer to repository: " + beer.getBeerName());
 
@@ -42,7 +42,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void updateBeerById(UUID beerId, Beer beer) {
+    public void updateBeerById(UUID beerId, BeerDTO beer) {
 
         log.debug("Update existing beer with Id: " + beerId);
 
@@ -58,7 +58,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void patchBeerById(UUID beerId, Beer beer) {
+    public void patchBeerById(UUID beerId, BeerDTO beer) {
 
         log.debug("Patch existing beer with Id: " + beerId);
 

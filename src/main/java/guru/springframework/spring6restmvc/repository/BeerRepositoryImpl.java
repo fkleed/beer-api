@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.repository;
 
-import guru.springframework.spring6restmvc.model.Beer;
+import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Repository
 public class BeerRepositoryImpl<T> implements BeerRepository<T> {
 
-    private Map<UUID, Beer> beerMap;
+    private Map<UUID, BeerDTO> beerMap;
 
     public BeerRepositoryImpl() {
         this.beerMap = new HashMap<>();
@@ -26,9 +26,9 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
 
 
     @Override
-    public Beer store(Beer beer) {
+    public BeerDTO store(BeerDTO beer) {
 
-        Beer savedBeer = Beer.builder()
+        BeerDTO savedBeer = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
@@ -46,12 +46,12 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
     }
 
     @Override
-    public List<Beer> findAll() {
+    public List<BeerDTO> findAll() {
         return new ArrayList<>(beerMap.values());
     }
 
     @Override
-    public Beer findById(UUID id) {
+    public BeerDTO findById(UUID id) {
         return beerMap.get(id);
     }
 
@@ -61,9 +61,9 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
     }
 
     @Override
-    public void updateBeerById(UUID beerId, Beer beer) {
+    public void updateBeerById(UUID beerId, BeerDTO beer) {
 
-        Beer existingBeer = beerMap.get(beerId);
+        BeerDTO existingBeer = beerMap.get(beerId);
 
         existingBeer.setBeerName(beer.getBeerName());
         existingBeer.setBeerStyle(beer.getBeerStyle());
@@ -76,9 +76,9 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
     }
 
     @Override
-    public void patchBeerById(UUID beerId, Beer beer) {
+    public void patchBeerById(UUID beerId, BeerDTO beer) {
 
-        Beer existingBeer = beerMap.get(beerId);
+        BeerDTO existingBeer = beerMap.get(beerId);
 
         if (StringUtils.hasText(beer.getBeerName())) {
             existingBeer.setBeerName(beer.getBeerName());
@@ -107,7 +107,7 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
 
     @PostConstruct
     public void init() {
-        Beer beer1 = Beer.builder()
+        BeerDTO beer1 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Galaxy Cat")
@@ -119,7 +119,7 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Beer beer2 = Beer.builder()
+        BeerDTO beer2 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Crank")
@@ -131,7 +131,7 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Beer beer3 = Beer.builder()
+        BeerDTO beer3 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Sunshine City")

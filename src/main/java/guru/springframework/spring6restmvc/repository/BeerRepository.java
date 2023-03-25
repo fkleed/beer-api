@@ -1,21 +1,21 @@
 package guru.springframework.spring6restmvc.repository;
 
-import guru.springframework.spring6restmvc.model.Beer;
+import guru.springframework.spring6restmvc.model.BeerDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface BeerRepository<T> {
 
-    Beer store(Beer beer);
+    BeerDTO store(BeerDTO beer);
 
-    List<Beer> findAll();
+    List<BeerDTO> findAll();
 
-    Beer findById(UUID id);
+    BeerDTO findById(UUID id);
 
     void deleteById(UUID id);
 
-    void updateBeerById(UUID beerId, Beer beer);
+    void updateBeerById(UUID beerId, BeerDTO beer);
 
-    void patchBeerById(UUID beerId, Beer beer);
+    void patchBeerById(UUID beerId, BeerDTO beer);
 }

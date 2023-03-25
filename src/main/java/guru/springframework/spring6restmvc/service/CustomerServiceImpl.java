@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.service;
 
-import guru.springframework.spring6restmvc.model.Customer;
+import guru.springframework.spring6restmvc.model.CustomerDTO;
 import guru.springframework.spring6restmvc.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public List<Customer> listCustomers() {
+    public List<CustomerDTO> listCustomers() {
 
         log.debug("Get all customers in service");
 
@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById(UUID id) {
+    public Optional<CustomerDTO> getCustomerById(UUID id) {
 
         log.debug("Get Customer by Id - in service. Id: " + id.toString());
 
@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer saveNewCustomer(Customer customer) {
+    public CustomerDTO saveNewCustomer(CustomerDTO customer) {
 
         log.debug("Save new customer to repository: " + customer.getCustomerName());
 
@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomerById(UUID customerId, Customer customer) {
+    public void updateCustomerById(UUID customerId, CustomerDTO customer) {
 
         log.debug("Update existing customer with Id: " + customerId);
 
@@ -58,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void patchCustomerById(UUID customerId, Customer customer) {
+    public void patchCustomerById(UUID customerId, CustomerDTO customer) {
 
         log.debug("Patch existing customer with Id: " + customerId);
 

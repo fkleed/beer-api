@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.repository;
 
-import guru.springframework.spring6restmvc.model.Customer;
+import guru.springframework.spring6restmvc.model.CustomerDTO;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -15,16 +15,16 @@ import java.util.UUID;
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository {
 
-    private Map<UUID, Customer> customerMap;
+    private Map<UUID, CustomerDTO> customerMap;
 
     public CustomerRepositoryImpl() {
         this.customerMap = new HashMap<>();
     }
 
     @Override
-    public Customer store(Customer customer) {
+    public CustomerDTO store(CustomerDTO customer) {
 
-        Customer savedCustomer = Customer.builder()
+        CustomerDTO savedCustomer = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName(customer.getCustomerName())
@@ -38,18 +38,18 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public List<Customer> findAll() {
+    public List<CustomerDTO> findAll() {
         return new ArrayList<>(customerMap.values());
     }
 
     @Override
-    public Customer findById(UUID id) {
+    public CustomerDTO findById(UUID id) {
         return customerMap.get(id);
     }
 
     @Override
-    public void updateCustomerById(UUID customerId, Customer customer) {
-        Customer existingCustomer = customerMap.get(customerId);
+    public void updateCustomerById(UUID customerId, CustomerDTO customer) {
+        CustomerDTO existingCustomer = customerMap.get(customerId);
 
         existingCustomer.setCustomerName(customer.getCustomerName());
         existingCustomer.setUpdateDate(LocalDateTime.now());
@@ -63,9 +63,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public void patchCustomerById(UUID customerId, Customer customer) {
+    public void patchCustomerById(UUID customerId, CustomerDTO customer) {
 
-        Customer existingCustomer = customerMap.get(customerId);
+        CustomerDTO existingCustomer = customerMap.get(customerId);
 
         if (StringUtils.hasText(customer.getCustomerName())) {
             existingCustomer.setCustomerName(customer.getCustomerName());
@@ -78,7 +78,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @PostConstruct
     public void init() {
-        Customer customer1 = Customer.builder()
+        CustomerDTO customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Homer Simpson")
@@ -86,7 +86,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Customer customer2 = Customer.builder()
+        CustomerDTO customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Marge Simpson")
@@ -94,7 +94,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Customer customer3 = Customer.builder()
+        CustomerDTO customer3 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Monty Burns")

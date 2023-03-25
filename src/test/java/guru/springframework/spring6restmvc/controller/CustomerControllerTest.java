@@ -1,7 +1,7 @@
 package guru.springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.spring6restmvc.model.Customer;
+import guru.springframework.spring6restmvc.model.CustomerDTO;
 import guru.springframework.spring6restmvc.service.CustomerService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,9 +42,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
-    private static Customer customer1;
-    private static Customer customer2;
-    private static Customer customer3;
+    private static CustomerDTO customer1;
+    private static CustomerDTO customer2;
+    private static CustomerDTO customer3;
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     MockMvc mockMvc;
@@ -53,11 +53,11 @@ class CustomerControllerTest {
     ObjectMapper objectMapper;
     @MockBean
     CustomerService customerService;
-    private Map<UUID, Customer> customerMap = new HashMap<>();
+    private Map<UUID, CustomerDTO> customerMap = new HashMap<>();
 
     @BeforeAll
     static void setup() {
-        customer1 = Customer.builder()
+        customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Homer Simpson")
@@ -65,7 +65,7 @@ class CustomerControllerTest {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        customer2 = Customer.builder()
+        customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Marge Simpson")
@@ -73,7 +73,7 @@ class CustomerControllerTest {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        customer3 = Customer.builder()
+        customer3 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Monty Burns")
@@ -98,7 +98,7 @@ class CustomerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<Customer> customerArgumentCaptor;
+    ArgumentCaptor<CustomerDTO> customerArgumentCaptor;
 
     @Test
     void updateCustomerPatchById() throws Exception {
@@ -136,7 +136,7 @@ class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(customer2)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).updateCustomerById(uuidArgumentCaptor.capture(), any(Customer.class));
+        verify(customerService).updateCustomerById(uuidArgumentCaptor.capture(), any(CustomerDTO.class));
 
         assertThat(customer2.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
@@ -144,11 +144,11 @@ class CustomerControllerTest {
     @Disabled
     @Test
     void createNewCustomer() throws Exception {
-        Customer customerToCreate = customer1;
+        CustomerDTO customerToCreate = customer1;
         customerToCreate.setId(UUID.randomUUID());
         customerToCreate.setCustomerName("TestCustomer");
 
-        given(customerService.saveNewCustomer(any(Customer.class))).willReturn(customerToCreate);
+        given(customerService.saveNewCustomer(any(CustomerDTO.class))).willReturn(customerToCreate);
 
         mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
