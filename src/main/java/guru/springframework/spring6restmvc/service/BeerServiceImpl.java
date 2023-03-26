@@ -1,7 +1,7 @@
 package guru.springframework.spring6restmvc.service;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
-import guru.springframework.spring6restmvc.repository.BeerRepository;
+import guru.springframework.spring6restmvc.repository.BeerRepositoryOld;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,14 @@ import java.util.UUID;
 @Service
 public class BeerServiceImpl implements BeerService {
 
-    private final BeerRepository beerRepository;
+    private final BeerRepositoryOld beerRepositoryOld;
 
     @Override
     public List<BeerDTO> listBeers() {
 
         log.debug("Get all beer in service");
 
-        return beerRepository.findAll();
+        return beerRepositoryOld.findAll();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BeerServiceImpl implements BeerService {
 
         log.debug("Get Beer by Id - in service. Id: " + id.toString());
 
-        return Optional.ofNullable(beerRepository.findById(id));
+        return Optional.ofNullable(beerRepositoryOld.findById(id));
     }
 
     @Override
@@ -38,31 +38,31 @@ public class BeerServiceImpl implements BeerService {
 
         log.debug("Save new beer to repository: " + beer.getBeerName());
 
-        return beerRepository.store(beer);
+        return beerRepositoryOld.store(beer);
     }
 
     @Override
-    public void updateBeerById(UUID beerId, BeerDTO beer) {
+    public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer) {
 
         log.debug("Update existing beer with Id: " + beerId);
 
-        beerRepository.updateBeerById(beerId, beer);
+        return Optional.of(beerRepositoryOld.updateBeerById(beerId, beer));
     }
 
     @Override
-    public void deleteById(UUID beerId) {
+    public Boolean deleteById(UUID beerId) {
 
         log.debug("Delete existing beer with Id: " + beerId);
 
-        beerRepository.deleteById(beerId);
+        return beerRepositoryOld.deleteById(beerId);
     }
 
     @Override
-    public void patchBeerById(UUID beerId, BeerDTO beer) {
+    public Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO beer) {
 
         log.debug("Patch existing beer with Id: " + beerId);
 
-        beerRepository.patchBeerById(beerId, beer);
+        return Optional.of(beerRepositoryOld.patchBeerById(beerId, beer));
     }
 
 

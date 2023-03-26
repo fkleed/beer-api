@@ -105,6 +105,8 @@ class CustomerControllerTest {
         Map<String, Object> patchCustomerMap = new HashMap<>();
         patchCustomerMap.put("customerName", "New Name");
 
+        given(customerService.patchCustomerById(any(), any())).willReturn(Optional.of(customer1));
+
         mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customer1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -119,6 +121,8 @@ class CustomerControllerTest {
 
     @Test
     void deleteById() throws Exception {
+        given(customerService.deleteById(any())).willReturn(true);
+
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer3.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -130,6 +134,8 @@ class CustomerControllerTest {
 
     @Test
     void updateById() throws Exception {
+        given(customerService.updateCustomerById(any(), any())).willReturn(Optional.of(customer2));
+
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer2.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -141,7 +147,6 @@ class CustomerControllerTest {
         assertThat(customer2.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
-    @Disabled
     @Test
     void createNewCustomer() throws Exception {
         CustomerDTO customerToCreate = customer1;

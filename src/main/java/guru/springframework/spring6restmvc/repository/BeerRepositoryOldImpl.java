@@ -16,11 +16,11 @@ import java.util.UUID;
 
 
 @Repository
-public class BeerRepositoryImpl<T> implements BeerRepository<T> {
+public class BeerRepositoryOldImpl<T> implements BeerRepositoryOld<T> {
 
     private Map<UUID, BeerDTO> beerMap;
 
-    public BeerRepositoryImpl() {
+    public BeerRepositoryOldImpl() {
         this.beerMap = new HashMap<>();
     }
 
@@ -56,13 +56,7 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
     }
 
     @Override
-    public void deleteById(UUID id) {
-        beerMap.remove(id);
-    }
-
-    @Override
-    public void updateBeerById(UUID beerId, BeerDTO beer) {
-
+    public BeerDTO updateBeerById(UUID beerId, BeerDTO beer) {
         BeerDTO existingBeer = beerMap.get(beerId);
 
         existingBeer.setBeerName(beer.getBeerName());
@@ -73,10 +67,20 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
         existingBeer.setUpdateDate(LocalDateTime.now());
 
         beerMap.put(existingBeer.getId(), existingBeer);
+        return existingBeer;
     }
 
     @Override
-    public void patchBeerById(UUID beerId, BeerDTO beer) {
+    public Boolean deleteById(UUID id) {
+        if (beerMap.containsKey(id)) {
+            beerMap.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public BeerDTO patchBeerById(UUID beerId, BeerDTO beer) {
 
         BeerDTO existingBeer = beerMap.get(beerId);
 
@@ -103,6 +107,8 @@ public class BeerRepositoryImpl<T> implements BeerRepository<T> {
         existingBeer.setUpdateDate(LocalDateTime.now());
 
         beerMap.put(existingBeer.getId(), existingBeer);
+
+        return existingBeer;
     }
 
     @PostConstruct

@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Repository
-public class CustomerRepositoryImpl implements CustomerRepository {
+public class CustomerRepositoryOldImpl implements CustomerRepositoryOld {
 
     private Map<UUID, CustomerDTO> customerMap;
 
-    public CustomerRepositoryImpl() {
+    public CustomerRepositoryOldImpl() {
         this.customerMap = new HashMap<>();
     }
 
@@ -48,22 +48,27 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public void updateCustomerById(UUID customerId, CustomerDTO customer) {
+    public CustomerDTO updateCustomerById(UUID customerId, CustomerDTO customer) {
         CustomerDTO existingCustomer = customerMap.get(customerId);
 
         existingCustomer.setCustomerName(customer.getCustomerName());
         existingCustomer.setUpdateDate(LocalDateTime.now());
 
         customerMap.put(existingCustomer.getId(), existingCustomer);
+        return existingCustomer;
     }
 
     @Override
-    public void deleteById(UUID id) {
-        customerMap.remove(id);
+    public Boolean deleteById(UUID id) {
+        if (customerMap.containsKey(id)) {
+            customerMap.remove(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void patchCustomerById(UUID customerId, CustomerDTO customer) {
+    public CustomerDTO patchCustomerById(UUID customerId, CustomerDTO customer) {
 
         CustomerDTO existingCustomer = customerMap.get(customerId);
 
@@ -74,6 +79,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         existingCustomer.setUpdateDate(LocalDateTime.now());
 
         customerMap.put(existingCustomer.getId(), existingCustomer);
+
+        return existingCustomer;
     }
 
     @PostConstruct

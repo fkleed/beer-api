@@ -116,6 +116,8 @@ class BeerControllerTest {
         Map<String, Object> patchBeerMap = new HashMap<>();
         patchBeerMap.put("beerName", "New Name");
 
+        given(beerService.patchBeerById(any(), any())).willReturn(Optional.of(beer1));
+
         mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -130,6 +132,8 @@ class BeerControllerTest {
 
     @Test
     void deleteById() throws Exception {
+        given(beerService.deleteById(any())).willReturn(true);
+
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer3.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -141,6 +145,8 @@ class BeerControllerTest {
 
     @Test
     void updateById() throws Exception {
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer2));
+
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer2.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
